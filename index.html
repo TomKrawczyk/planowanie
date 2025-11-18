@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>Optymalizator Tras - Planowanie Spotkań</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=geometry,places&callback=initMap" async defer></script>
+  <script type="module" crossorigin src="/assets/index-B4FJ88DK.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-3RU8qluu.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🗺️ Optymalizator Tras</h1>
+            <p class="subtitle">Automatyczne planowanie optymalnych tras spotkań</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="card">
+                    <h2>📝 Dodaj Spotkanie</h2>
+                    <form id="meetingForm" class="meeting-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Imię:</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Nazwisko:</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Telefon:</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postalCode">Kod pocztowy:</label>
+                                <input type="text" id="postalCode" name="postalCode" pattern="[0-9]{2}-?[0-9]{3}" placeholder="00-000" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Adres:</label>
+                            <input type="text" id="address" name="address" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="meetingDate">Data spotkania:</label>
+                                <input type="date" id="meetingDate" name="meetingDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="meetingTime">Godzina:</label>
+                                <input type="time" id="meetingTime" name="meetingTime" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">➕ Dodaj Spotkanie</button>
+                    </form>
+                </div>
+
+                <!-- Settings -->
+                <div class="card">
+                    <h3>⚙️ Ustawienia Optymalizacji</h3>
+                    <div class="settings">
+                        <div class="form-group">
+                            <label for="maxDistance">Maksymalny limit trasy (km):</label>
+                            <input type="number" id="maxDistance" value="150" min="50" max="500">
+                        </div>
+                        <button id="optimizeBtn" class="btn btn-success">🎯 Optymalizuj Trasy</button>
+                        <button id="clearBtn" class="btn btn-danger">🗑️ Wyczyść Wszystko</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <!-- Meetings List -->
+                <div class="card">
+                    <h3>📋 Lista Spotkań (<span id="meetingCount">0</span>)</h3>
+                    <div id="meetingsList" class="meetings-list">
+                        <p class="empty-state">Brak dodanych spotkań</p>
+                    </div>
+                </div>
+
+                <!-- Optimized Routes -->
+                <div class="card" id="routesCard" style="display: none;">
+                    <h3>🗺️ Zoptymalizowane Trasy</h3>
+                    <div id="routesList" class="routes-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-section">
+            <div class="card">
+                <h3>🌍 Mapa Tras</h3>
+                <div id="map" class="map-container"></div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-section">
+            <div class="card">
+                <h3>📊 Statystyki</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Spotkania:</span>
+                        <span class="stat-value" id="statMeetings">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Trasy:</span>
+                        <span class="stat-value" id="statRoutes">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Łączna odległość:</span>
+                        <span class="stat-value" id="statDistance">0 km</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Województwa:</span>
+                        <span class="stat-value" id="statRegions">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Optymalizowanie tras...</p>
+        </div>
+    </div>
+
+<script src="https://public-frontend-cos.metadl.com/commonfile/appPlugins-prod-1757257819217.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script></body>
+
+</html>
